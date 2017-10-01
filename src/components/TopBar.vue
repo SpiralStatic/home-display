@@ -1,5 +1,5 @@
 <template>
-	<el-menu theme="dark" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+	<el-menu theme="dark" class="navbar" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
 		<el-menu-item index="1">{{ location }}</el-menu-item>
 		<el-submenu index="2">
 			<template slot="title">Workspace</template>
@@ -34,16 +34,20 @@
 </script>
 
 <style lang="scss" scoped>
-	.last-item {
-		float: right;
-	}
+	.navbar {
+		margin-bottom: 2em;
 
-	.vue-logo {
-		height: 30px;
-	}
+		.last-item {
+			float: right;
+		}
 
-	.remove-link-styling {
-		color: inherit;
-		text-decoration: inherit;
-	}
+		.vue-logo {
+			height: 30px;
+		}
+
+		.remove-link-styling {
+			color: inherit;
+			text-decoration: inherit;
+		}
+}
 </style>

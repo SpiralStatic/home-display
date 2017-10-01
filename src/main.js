@@ -4,9 +4,11 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import Element from 'element-ui';
+import VueResource from 'vue-resource';
 
 Vue.config.productionTip = false;
 
+Vue.use(VueResource);
 Vue.use(Element);
 
 /* eslint-disable no-new */
