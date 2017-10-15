@@ -2,10 +2,25 @@
 	<el-row class="transport">
 		<el-col :span="24">
 			<el-card class="card-style">
-				<div slot="header" class="clearfix">
-    				<span>Transport / Tube</span>
+				<div slot="header">
+					<el-row type="flex" class="row-bg" justify="space-between">
+						<el-col :span="6"></el-col>
+						<el-col :span="6">
+							<div class="grid-content">Transport / Tube</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="grid-content">
+								<el-select v-model="selectedRoutes" multiple filterable placeholder="Select Routes" id="selected_routes">
+									<el-option v-for="tubeLine in tubeData" :key="tubeLine.id"
+										:label="tubeLine.name"
+										:value="tubeLine.id">
+									</el-option>
+								</el-select>
+							</div>
+						</el-col>
+					</el-row>
   				</div>
-				<div v-for="tubeLine in tubeData" :key="tubeLine.id">
+				<div v-for="tubeLine in tubeData" :key="tubeLine.id" v-if="selectedRoutes.indexOf(tubeLine.id) !== -1">
 					<el-button-group class="tube-styling">
 						<el-button class="first-item" :style="{ 'background-color': getTubeColor(tubeLine.id) }">{{ tubeLine.name }}</el-button>
 						<el-popover
@@ -25,67 +40,68 @@
 </template>
 
 <script>
-export default {
-	name: 'transport',
-	data () {
-		return {
-			tubeData: ''
-		};
-	},
-	methods: {
-		getTubeData () {
-			this.$http
-				.get('https://api.tfl.gov.uk/Line/Mode/tube/Status?detail=true')
-				.then((response) => {
-					this.tubeData = response.data;
-				},
-				(err) => console.log(err));
+	export default {
+		name: 'transport',
+		data () {
+			return {
+				tubeData: [],
+				selectedRoutes: []
+			};
 		},
-		getTubeColor (tubeLine) {
-			if (!tubeLine) return '';
+		methods: {
+			getTubeData () {
+				this.$http
+					.get('https://api.tfl.gov.uk/Line/Mode/tube/Status?detail=true')
+					.then((response) => {
+						this.tubeData = response.data;
+					},
+					(err) => console.log(err));
+			},
+			getTubeColor (tubeLine) {
+				if (!tubeLine) return '';
 
-			switch (tubeLine) {
-			case 'bakerloo':
-				return 'rgba(179, 99, 5, 0.85)';
-			case 'central':
-				return 'rgba(227, 32, 23, 0.85)';
-			case 'circle':
-				return 'rgba(255, 211, 0, 0.85)';
-			case 'district':
-				return 'rgba(0, 120, 42, 0.85)';
-			case 'hammersmith-city':
-				return 'rgba(243, 169, 187, 0.85)';
-			case 'jubilee':
-				return 'rgba(160, 165, 169, 0.85)';
-			case 'metropolitan':
-				return 'rgba(155, 0, 86, 0.85)';
-			case 'northern':
-				return 'rgba(0, 0, 0, 0.85)';
-			case 'piccadilly':
-				return 'rgba(0 ,54, 136, 0.85)';
-			case 'victoria':
-				return 'rgba(0, 152, 212, 0.85)';
-			case 'waterloo-city':
-				return 'rgba(149, 205, 186, 0.85)';
+				switch (tubeLine) {
+				case 'bakerloo':
+					return 'rgba(179, 99, 5, 0.85)';
+				case 'central':
+					return 'rgba(227, 32, 23, 0.85)';
+				case 'circle':
+					return 'rgba(255, 211, 0, 0.85)';
+				case 'district':
+					return 'rgba(0, 120, 42, 0.85)';
+				case 'hammersmith-city':
+					return 'rgba(243, 169, 187, 0.85)';
+				case 'jubilee':
+					return 'rgba(160, 165, 169, 0.85)';
+				case 'metropolitan':
+					return 'rgba(155, 0, 86, 0.85)';
+				case 'northern':
+					return 'rgba(0, 0, 0, 0.85)';
+				case 'piccadilly':
+					return 'rgba(0 ,54, 136, 0.85)';
+				case 'victoria':
+					return 'rgba(0, 152, 212, 0.85)';
+				case 'waterloo-city':
+					return 'rgba(149, 205, 186, 0.85)';
+				}
+			},
+			getStatusColor (status) {
+				if (!status) return '';
+
+				switch (status) {
+				case 10:
+					return 'success';
+				case 5:
+					return 'warning';
+				case 20:
+					return 'danger';
+				}
 			}
 		},
-		getStatusColor (status) {
-			if (!status) return '';
-
-			switch (status) {
-			case 10:
-				return 'success';
-			case 5:
-				return 'warning';
-			case 20:
-				return 'danger';
-			}
+		created () {
+			this.getTubeData();
 		}
-	},
-	created () {
-		this.getTubeData();
-	}
-};
+	};
 </script>
 
 <style lang="scss" scoped>
@@ -117,5 +133,17 @@ export default {
 				}
 			}
 		}
-}
+
+		.last-item {
+			float: right
+		}
+	}
+</style>
+
+<style lang="scss">
+	#selected_routes {
+		.el-select__tags {
+			display: none;
+		}
+	}
 </style>
