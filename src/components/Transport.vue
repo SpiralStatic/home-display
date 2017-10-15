@@ -15,8 +15,7 @@
 							:disabled="tubeLine.lineStatuses[0].statusSeverity === 10"
 							:content="tubeLine.lineStatuses[0].reason">
 							<el-button slot="reference" class="second-item" :style="{ 'background-color': getTubeColor(tubeLine.id)}">{{ tubeLine.lineStatuses[0].reason }}</el-button>
-						</el-popover>
-						
+						</el-popover>						
 						<el-button :type="getStatusColor(tubeLine.lineStatuses[0].statusSeverity)" class="third-item">{{ tubeLine.lineStatuses[0].statusSeverityDescription }}</el-button>
 					</el-button-group>
   				</div>
@@ -90,29 +89,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.card-style {
-		background-color: rgba(255, 255, 255, 0.7);
-		.tube-styling {
-			width: 100%;
+	.transport {
+		margin-bottom: 2em;
+		
+		.card-style {
+			background-color: rgba(255, 255, 255, 0.7);
+			.tube-styling {
+				width: 100%;
 
-			.el-button {
-				color: black;
-				min-height: 3em;
-				margin: 0.2em 0;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
+				.el-button {
+					color: black;
+					min-height: 3em;
+					margin: 0.2em 0;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
 
-			.first-item {
-				width: 15%;
-			}
-			.second-item {
-				width: 70%;
-			}
-			.third-item {
-				width: 15%;
+				.first-item {
+					width: 15%;
+				}
+				.second-item {
+					width: 70%;
+				}
+				.third-item {
+					width: 15%;
+				}
 			}
 		}
-	}
+}
 </style>

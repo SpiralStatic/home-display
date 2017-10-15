@@ -2,12 +2,14 @@
 	<div class="home">
 		<top-bar :location="location"></top-bar>
 		<transport></transport>
+		<calender></calender>
 	</div>
 </template>
 
 <script>
 	import TopBar from './TopBar.vue';
 	import Transport from './Transport.vue';
+	import Calender from './Calender.vue';
 
 	export default {
 		name: 'home',
@@ -19,7 +21,8 @@
 		},
 		components: {
 			TopBar,
-			Transport
+			Transport,
+			Calender
 		}
 	};
 </script>
