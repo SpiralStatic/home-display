@@ -11,14 +11,14 @@
 						<el-col :span="6">
 							<el-row type="flex">
 								<el-select v-model="selectedRoutes" multiple filterable placeholder="Select Routes" id="selected_routes">
-									<el-option-group :label="selectedGroups.tube" v-if="tubeData.length > 0">
-										<el-option v-for="tubeLine in tubeData" :key="tubeLine.id"
-											:label="tubeLine.name"
-											:value="tubeLine.id">
+									<el-option-group :label="selectedGroups.tube" v-if="transportData.length > 0">
+										<el-option v-for="tube in transportData" :key="tube.id" v-if="tube.modeName === 'tube'"
+											:label="tube.name"
+											:value="tube.id">
 										</el-option>
 									</el-option-group>
-									<el-option-group :label="selectedGroups.custom" v-if="customData.length > 0">
-										<el-option v-for="customRoute in customData" :key="customRoute.id"
+									<el-option-group :label="selectedGroups.custom" v-if="transportData.length > 0">
+										<el-option v-for="customRoute in transportData" :key="customRoute.id" v-if="customRoute.modeName !== 'tube'"
 											:label="customRoute.name"
 											:value="customRoute.id">
 										</el-option>
@@ -29,15 +29,15 @@
 						</el-col>
 					</el-row>
   				</div>
-				<div v-for="tubeLine in tubeData" :key="tubeLine.id" v-if="selectedRoutes.indexOf(tubeLine.id) !== -1">
+				<div v-for="route in transportData" :key="route.id" v-if="selectedRoutes.indexOf(route.id) !== -1">
 					<el-button-group class="tube-styling">
-						<el-button class="first-item" :style="{ 'background-color': getTubeColor(tubeLine.id) }">{{ tubeLine.name }}</el-button>
+						<el-button class="first-item" :style="{ 'background-color': getRouteColor(route.id) }">{{ route.name }}</el-button>
 						<el-popover placement="bottom" width="600" popper-class="further-info"
-							:disabled="tubeLine.lineStatuses[0].statusSeverity === 10"
-							:content="tubeLine.lineStatuses[0].reason">
-							<el-button slot="reference" class="second-item" :style="{ 'background-color': getTubeColor(tubeLine.id) }">{{ tubeLine.lineStatuses[0].reason }}</el-button>
+							:disabled="route.lineStatuses[0].statusSeverity === 10"
+							:content="route.lineStatuses[0].reason">
+							<el-button slot="reference" class="second-item" :style="{ 'background-color': getRouteColor(route.id) }">{{ route.lineStatuses[0].reason }}</el-button>
 						</el-popover>						
-						<el-button :type="getStatusColor(tubeLine.lineStatuses[0].statusSeverity)" class="third-item">{{ tubeLine.lineStatuses[0].statusSeverityDescription }}</el-button>
+						<el-button :type="getStatusColor(route.lineStatuses[0].statusSeverity)" class="third-item">{{ route.lineStatuses[0].statusSeverityDescription }}</el-button>
 					</el-button-group>
   				</div>
 			</el-card>
@@ -53,11 +53,11 @@
 				<template slot="prepend">New Route:</template>
 			</el-autocomplete>
 
-			<div v-for="(customRoute, key, index) in customData" :key="customRoute.id" id="custom_routes">
+			<div v-for="(customRoute, key, index) in transportData" :key="customRoute.id" id="custom_routes" v-if="customRoute.modeName !== 'tube'">
 				<el-button-group class="route-styling">
-					<el-button class="first-item" :style="{ 'background-color': getTubeColor(customRoute.modeName) }">{{ capitalise(customRoute.modeName) }}</el-button>	
-					<el-button class="second-item" :style="{ 'background-color': getTubeColor(customRoute.modeName) }">{{ customRoute.name }}</el-button>
-					<el-button class="third-item" icon="delete" @click="customData.splice(index, 1)"></el-button>
+					<el-button class="first-item" :style="{ 'background-color': getRouteColor(customRoute.modeName) }">{{ capitalise(customRoute.modeName) }}</el-button>	
+					<el-button class="second-item" :style="{ 'background-color': getRouteColor(customRoute.modeName) }">{{ customRoute.name }}</el-button>
+					<el-button class="third-item" icon="delete" @click="transportData.splice(index, 1)"></el-button>
 				</el-button-group>
 			</div>
 
@@ -75,13 +75,12 @@
 		name: 'transport',
 		data () {
 			return {
-				tubeData: [],
+				transportData: [],
 				selectedRoutes: [],
 				selectedGroups: {
 					tube: 'Tube Lines',
 					custom: 'Custom'
 				},
-				customData: [],
 				addRouteDialogVisible: false,
 				routeToSearch: '',
 				routeProperties: {
@@ -94,14 +93,14 @@
 				this.$http
 					.get('https://api.tfl.gov.uk/Line/Mode/tube/Status?detail=true')
 					.then((response) => {
-						this.tubeData = response.data;
+						this.transportData = response.data;
 					},
 					(err) => console.log(err));
 			},
-			getTubeColor (tubeLine) {
-				if (!tubeLine) return '';
+			getRouteColor (route) {
+				if (!route) return '';
 
-				switch (tubeLine) {
+				switch (route) {
 				case 'bakerloo':
 					return 'rgba(179, 99, 5, 0.85)';
 				case 'central':
@@ -149,7 +148,12 @@
 					(err) => console.log(err));
 			}, 2000),
 			selectedRoute (route) {
-				this.customData.push(route);
+				this.$http
+					.get('https://api.tfl.gov.uk/Line/' + route.id + '/Status?detail=true')
+					.then((response) => {
+						this.transportData.push(response.data[0]);
+					},
+					(err) => console.log(err));
 			},
 			capitalise (input) {
 				if (!input) return '';
