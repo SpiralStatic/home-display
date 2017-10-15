@@ -6,7 +6,7 @@
 					<el-row type="flex" justify="space-between">
 						<el-col :span="6"></el-col>
 						<el-col :span="6">
-							<span class="transport-title">Transport / Tube</span>
+							<strong class="transport-title">Transport</strong>
 						</el-col>
 						<el-col :span="6">
 							<el-row type="flex">
@@ -94,8 +94,33 @@
 					.get('https://api.tfl.gov.uk/Line/Mode/tube/Status?detail=true')
 					.then((response) => {
 						this.transportData = response.data;
+						this.transportData.map((tube) => {
+							this.selectedRoutes.push(tube.id);
+						});
 					},
 					(err) => console.log(err));
+			},
+			getRouteData: debounce(function (searchTerm, callback) {
+				this.$http
+					.get('https://api.tfl.gov.uk/Line/' + searchTerm)
+					.then((response) => {
+						callback(response.data);
+					},
+					(err) => console.log(err));
+			}, 2000),
+			selectedRoute (route) {
+				this.$http
+					.get('https://api.tfl.gov.uk/Line/' + route.id + '/Status?detail=true')
+					.then((response) => {
+						this.transportData.push(response.data[0]);
+						this.selectedRoutes.push(response.data[0].id);
+					},
+					(err) => console.log(err));
+			},
+			capitalise (input) {
+				if (!input) return '';
+				input = input.toString();
+				return input.charAt(0).toUpperCase() + input.slice(1);
 			},
 			getRouteColor (route) {
 				if (!route) return '';
@@ -138,27 +163,6 @@
 				case 20:
 					return 'danger';
 				}
-			},
-			getRouteData: debounce(function (searchTerm, callback) {
-				this.$http
-					.get('https://api.tfl.gov.uk/Line/' + searchTerm)
-					.then((response) => {
-						callback(response.data);
-					},
-					(err) => console.log(err));
-			}, 2000),
-			selectedRoute (route) {
-				this.$http
-					.get('https://api.tfl.gov.uk/Line/' + route.id + '/Status?detail=true')
-					.then((response) => {
-						this.transportData.push(response.data[0]);
-					},
-					(err) => console.log(err));
-			},
-			capitalise (input) {
-				if (!input) return '';
-				input = input.toString();
-				return input.charAt(0).toUpperCase() + input.slice(1);
 			}
 		},
 		created () {
@@ -177,6 +181,7 @@
 
 		.card-style {
 			background-color: rgba(255, 255, 255, 0.7);
+			
 			.tube-styling {
 				width: 100%;
 
