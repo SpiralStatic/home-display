@@ -1,5 +1,7 @@
+@import 'variables';
+
 body {
-	background: linear-gradient(0deg, rgba(12, 75, 125, 0.50), rgba(12, 75, 125, 0.50)), url('./assets/images/background.png') repeat;
+	background: linear-gradient(0deg, $secondary-color, $secondary-color), url('./assets/images/background.png') repeat;
 }
 
 #app {
@@ -7,13 +9,5 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
-}
-
-.further-info {
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #2c3e50;
-	font-size: 1.1rem;
+    color: $primary-color;
 }
