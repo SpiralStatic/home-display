@@ -2,16 +2,20 @@
 	<el-menu theme="dark" class="navbar" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
 		<el-menu-item index="1">{{ location }}</el-menu-item>
 		<el-submenu index="2">
-			<template slot="title">Workspace</template>
-			<el-menu-item index="2-1">item one</el-menu-item>
-			<el-menu-item index="2-2">item two</el-menu-item>
-			<el-menu-item index="2-3">item three</el-menu-item>
+			<template slot="title">Users</template>
+			<el-menu-item index="2-1">Chris</el-menu-item>
+			<el-menu-item index="2-2">Laura</el-menu-item>
+			<el-menu-item index="2-3">Rebecca</el-menu-item>
+			<el-menu-item index="2-4">Serban</el-menu-item>
 		</el-submenu>
-		<el-menu-item index="3" class="last-item">
+		<el-menu-item index="4" class="last-item">
 			<a href="https://vuejs.org/" class="remove-link-styling">
 				<span>Powered By</span>
 				<img src="../assets/images/logo.png" class="vue-logo">
 			</a>
+		</el-menu-item>
+		<el-menu-item index="3" class="last-item">
+			<span>{{ dateTime | moment("HH:mm - DD/MM/YYYY") }}</span>
 		</el-menu-item>
 	</el-menu>
 </template>
@@ -22,13 +26,20 @@
 		data () {
 			return {
 				activeIndex: '1',
-				location: '39 Elthorne Avenue'
+				location: '39 Elthorne Avenue',
+				dateTime: new Date()
 			};
 		},
 		methods: {
 			handleSelect (key, keyPath) {
 				console.log(key, keyPath);
+			},
+			updateDateTime () {
+				this.dateTime = new Date();
 			}
+		},
+		mounted () {
+			setInterval(this.updateDateTime, 60000);
 		}
 	};
 </script>

@@ -5,11 +5,13 @@ import App from './App';
 import router from './router';
 import Element from 'element-ui';
 import VueResource from 'vue-resource';
+import Moment from 'vue-moment';
 
 Vue.config.productionTip = false;
 
 Vue.use(VueResource);
 Vue.use(Element);
+Vue.use(Moment);
 
 /* eslint-disable no-new */
 new Vue({
