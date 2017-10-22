@@ -70,36 +70,28 @@
 
 <script>
 	const debounce = require('debounce');
+	import getRouteColor from '../mixins/GetRouteColor';
+	import capitalise from '../mixins/Capitalise';
 
 	export default {
-		name: 'transport',
+		name: 'Transport',
 		data () {
 			return {
-				transportData: [],
-				selectedRoutes: [],
+				addRouteDialogVisible: false,
+				routeProperties: {
+					label: 'name'
+				},
+				routeToSearch: '',
 				selectedGroups: {
 					tube: 'Tube Lines',
 					custom: 'Custom'
 				},
-				addRouteDialogVisible: false,
-				routeToSearch: '',
-				routeProperties: {
-					label: 'name'
-				}
+				selectedRoutes: [],
+				transportData: []
 			};
 		},
+		mixins: [getRouteColor, capitalise],
 		methods: {
-			getTubeData () {
-				this.$http
-					.get('https://api.tfl.gov.uk/Line/Mode/tube/Status?detail=true')
-					.then((response) => {
-						this.transportData = response.data;
-						this.transportData.map((tube) => {
-							this.selectedRoutes.push(tube.id);
-						});
-					},
-					(err) => console.log(err));
-			},
 			getRouteData: debounce(function (searchTerm, callback) {
 				this.$http
 					.get('https://api.tfl.gov.uk/Line/' + searchTerm)
@@ -108,50 +100,6 @@
 					},
 					(err) => console.log(err));
 			}, 2000),
-			selectedRoute (route) {
-				this.$http
-					.get('https://api.tfl.gov.uk/Line/' + route.id + '/Status?detail=true')
-					.then((response) => {
-						this.transportData.push(response.data[0]);
-						this.selectedRoutes.push(response.data[0].id);
-					},
-					(err) => console.log(err));
-			},
-			capitalise (input) {
-				if (!input) return '';
-				input = input.toString();
-				return input.charAt(0).toUpperCase() + input.slice(1);
-			},
-			getRouteColor (route) {
-				if (!route) return '';
-
-				switch (route) {
-				case 'bakerloo':
-					return 'rgba(179, 99, 5, 0.85)';
-				case 'central':
-					return 'rgba(227, 32, 23, 0.85)';
-				case 'circle':
-					return 'rgba(255, 211, 0, 0.85)';
-				case 'district':
-					return 'rgba(0, 120, 42, 0.85)';
-				case 'hammersmith-city':
-					return 'rgba(243, 169, 187, 0.85)';
-				case 'jubilee':
-					return 'rgba(160, 165, 169, 0.85)';
-				case 'metropolitan':
-					return 'rgba(155, 0, 86, 0.85)';
-				case 'northern':
-					return 'rgba(0, 0, 0, 0.85)';
-				case 'piccadilly':
-					return 'rgba(0 ,54, 136, 0.85)';
-				case 'victoria':
-					return 'rgba(0, 152, 212, 0.85)';
-				case 'waterloo-city':
-					return 'rgba(149, 205, 186, 0.85)';
-				default:
-					return 'rgba(208, 26, 30, 0.85)';
-				}
-			},
 			getStatusColor (status) {
 				if (!status) return '';
 
@@ -163,10 +111,36 @@
 				case 20:
 					return 'danger';
 				}
+			},
+			getTubeData () {
+				this.$http
+					.get('https://api.tfl.gov.uk/Line/Mode/tube/Status?detail=true')
+					.then((response) => {
+						this.transportData = response.data;
+						this.transportData.map((tube) => {
+							this.selectedRoutes.push(tube.id);
+						});
+					},
+					(err) => console.log(err));
+			},
+			selectedRoute (route) {
+				this.$http
+					.get('https://api.tfl.gov.uk/Line/' + route.id + '/Status?detail=true')
+					.then((response) => {
+						this.transportData.push(response.data[0]);
+						this.selectedRoutes.push(response.data[0].id);
+					},
+					(err) => console.log(err));
 			}
 		},
 		created () {
 			this.getTubeData();
+		},
+		mounted () {
+			setInterval(() => {
+				this.getTubeData();
+				this.getRouteData();
+			}, 60000);
 		}
 	};
 </script>
@@ -181,7 +155,7 @@
 
 		.card-style {
 			background-color: rgba(255, 255, 255, 0.7);
-			
+
 			.tube-styling {
 				width: 100%;
 

@@ -10,7 +10,7 @@
 
 <script>
 export default {
-	name: 'calender',
+	name: 'Calender',
 	data () {
 		return {
 			days: [

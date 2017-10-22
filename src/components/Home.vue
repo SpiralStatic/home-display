@@ -12,7 +12,7 @@
 	import Calender from './Calender.vue';
 
 	export default {
-		name: 'home',
+		name: 'Home',
 		data () {
 			return {
 				msg: 'Welcome to Your Vue.js App',

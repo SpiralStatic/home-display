@@ -22,12 +22,12 @@
 
 <script>
 	export default {
-		name: 'topbar',
+		name: 'TopBar',
 		data () {
 			return {
 				activeIndex: '1',
-				location: '39 Elthorne Avenue',
-				dateTime: new Date()
+				dateTime: new Date(),
+				location: '39 Elthorne Avenue'
 			};
 		},
 		methods: {
@@ -60,5 +60,5 @@
 			color: inherit;
 			text-decoration: inherit;
 		}
-}
+	}
 </style>
