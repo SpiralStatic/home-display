@@ -8,21 +8,29 @@
 			<el-menu-item index="2-3">Rebecca</el-menu-item>
 			<el-menu-item index="2-4">Serban</el-menu-item>
 		</el-submenu>
-		<el-menu-item index="4" class="last-item">
+		<el-menu-item index="5" class="last-item">
 			<a href="https://vuejs.org/" class="remove-link-styling">
 				<span>Powered By</span>
 				<img src="../assets/images/logo.png" class="vue-logo">
 			</a>
 		</el-menu-item>
-		<el-menu-item index="3" class="last-item">
+		<el-menu-item index="4" class="last-item">
 			<span>{{ dateTime | moment("HH:mm - DD/MM/YYYY") }}</span>
+		</el-menu-item>
+		<el-menu-item index="3" class="last-item">
+			<weather-widget />
 		</el-menu-item>
 	</el-menu>
 </template>
 
 <script>
+	import WeatherWidget from './WeatherWidget';
+
 	export default {
 		name: 'TopBar',
+		components: {
+			'weather-widget': WeatherWidget
+		},
 		data () {
 			return {
 				activeIndex: '1',

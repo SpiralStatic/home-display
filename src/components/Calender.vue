@@ -19,7 +19,7 @@ export default {
 		};
 	},
 	methods: {
-		limit: function (array, start, limit) {
+		limit: (array, start, limit) => {
 			return array.slice(start, limit);
 		}
 	}

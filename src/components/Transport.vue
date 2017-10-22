@@ -46,7 +46,7 @@
 		<el-dialog title="Add custom route/s" :visible.sync="addRouteDialogVisible" size="large">
 			<el-autocomplete
 				v-model="routeToSearch"
-				:fetch-suggestions="getRouteData"
+				:fetch-suggestions="fetchRouteData"
 				placeholder="Enter a valid route"
 				@select="selectedRoute"
 				:props="routeProperties">
@@ -92,7 +92,9 @@
 		},
 		mixins: [getRouteColor, capitalise],
 		methods: {
-			getRouteData: debounce(function (searchTerm, callback) {
+			fetchRouteData: debounce(function (searchTerm, callback) {
+				if (!searchTerm) return;
+
 				this.$http
 					.get('https://api.tfl.gov.uk/Line/' + searchTerm)
 					.then((response) => {
@@ -100,6 +102,14 @@
 					},
 					(err) => console.log(err));
 			}, 2000),
+			getRoute (route) {
+				return this.$http
+					.get('https://api.tfl.gov.uk/Line/' + route)
+					.then((response) => {
+						return response.data;
+					},
+					(err) => console.log(err));
+			},
 			getStatusColor (status) {
 				if (!status) return '';
 
@@ -133,14 +143,26 @@
 					(err) => console.log(err));
 			}
 		},
+		beforeDestroy () {
+			clearInterval(this.routeUpdater);
+		},
 		created () {
 			this.getTubeData();
 		},
 		mounted () {
-			setInterval(() => {
-				this.getTubeData();
-				this.getRouteData();
-			}, 60000);
+			// Update selected Routes with new information
+			this.routeUpdater = setInterval(() => {
+				this.selectedRoutes.map((value) => {
+					const toUpdate = this.transportData.findIndex((current) => {
+						return current === value;
+					});
+
+					this.getRoute(value)
+						.then((response) => {
+							this.transportData[toUpdate] = response;
+						});
+				});
+			}, (5 * 60000));
 		}
 	};
 </script>
