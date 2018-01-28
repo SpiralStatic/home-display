@@ -26,7 +26,7 @@ module.exports = {
     // Enforce semi-colons
     'semi': ['error', 'always'],
     // Tab indentation
-    'indent': ['2', 'tab'],
+    'indent': ['error', 'tab', {"SwitchCase": 1}],
     'no-tabs': 0
   }
 }

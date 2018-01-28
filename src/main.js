@@ -21,4 +21,4 @@ new Vue({
 	components: { App }
 });
 
-import 'element-ui/lib/theme-default/index.css';
+import 'element-ui/lib/theme-chalk/index.css';

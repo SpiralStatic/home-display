@@ -1,15 +1,37 @@
 const WeatherUtilities = {
 	methods: {
 		getWeatherIcon: function (weatherCode) {
-			if (!weatherCode) return 'adjust';
+			if (!weatherCode) return 'el-icon-fa-adjust';
 
 			switch (weatherCode) {
 				case '01d':
-					return 'sun-o';
+					return 'el-icon-fa-sun-o';
 				case '01n':
-					return 'moon-o';
+					return 'el-icon-fa-moon-o';
+				case '02d':
+				case '02n':
+				case '03d':
+				case '03n':
+				case '04d':
+				case '04n':
+					return 'el-icon-fa-cloud';
+				case '09d':
+				case '09n':
+					return 'el-icon-fa-tint';
+				case '10d':
+				case '10n':
+					return 'el-icon-fa-shower';
+				case '11d':
+				case '11n':
+					return 'el-icon-fa-bolt';
+				case '13d':
+				case '13n':
+					return 'el-icon-fa-snowflake-o';
+				case '50d':
+				case '50n':
+					return 'el-icon-fa-low-vision';
 				default:
-					return 'adjust';
+					return 'el-icon-fa-adjust';
 			}
 		},
 		getTemperatureIcon: function (temperature) {

@@ -10,7 +10,7 @@
 						</el-col>
 						<el-col :span="6">
 							<el-row type="flex">
-								<el-select v-model="selectedRoutes" multiple filterable placeholder="Select Routes" id="selected_routes">
+								<el-select v-model="selectedRoutes" multiple filterable collapse-tags placeholder="Select Routes" id="selected_routes">
 									<el-option-group :label="selectedGroups.tube" v-if="transportData.length > 0">
 										<el-option v-for="tube in transportData" :key="tube.id" v-if="tube.modeName === 'tube'"
 											:label="tube.name"
@@ -24,32 +24,32 @@
 										</el-option>
 									</el-option-group>
 								</el-select>
-								<el-button type="primary" icon="plus" class="add-route-btn" @click="addRouteDialogVisible = true"></el-button>
+								<el-button type="primary" icon="el-icon-plus"  @click="addRouteDialogVisible = true"></el-button>
 							</el-row>
 						</el-col>
 					</el-row>
   				</div>
 				<div v-for="route in transportData" :key="route.id" v-if="selectedRoutes.indexOf(route.id) !== -1">
 					<el-button-group class="tube-styling">
-						<el-button class="first-item" :style="{ 'background-color': getRouteColor(route.id) }">{{ route.name }}</el-button>
+						<el-button class="first-item" :style="{ 'box-shadow': `0 8px 0 -4px ${getRouteColor(route.id)} inset, 0 -8px 0 -4px ${getRouteColor(route.id)} inset` }">{{ route.name }}</el-button>
 						<el-popover placement="bottom" width="600" popper-class="further-info"
 							:disabled="route.lineStatuses[0].statusSeverity === 10"
 							:content="route.lineStatuses[0].reason">
-							<el-button slot="reference" class="second-item" :style="{ 'background-color': getRouteColor(route.id) }">{{ route.lineStatuses[0].reason }}</el-button>
+							<el-button slot="reference" class="second-item" :style="{ 'box-shadow': `0 8px 0 -4px ${getRouteColor(route.id)} inset, 0 -8px 0 -4px ${getRouteColor(route.id)} inset` }">{{ route.lineStatuses[0].reason }}</el-button>
 						</el-popover>						
-						<el-button :type="getStatusColor(route.lineStatuses[0].statusSeverity)" class="third-item">{{ route.lineStatuses[0].statusSeverityDescription }}</el-button>
+						<el-button :type="getStatusColor(route.lineStatuses[0].statusSeverity)" class="third-item" >{{ route.lineStatuses[0].statusSeverityDescription }}</el-button>
 					</el-button-group>
   				</div>
 			</el-card>
 		</el-col>
 
-		<el-dialog title="Add custom route/s" :visible.sync="addRouteDialogVisible" size="large">
+		<el-dialog title="Add custom route/s" :visible.sync="addRouteDialogVisible">
 			<el-autocomplete
 				v-model="routeToSearch"
 				:fetch-suggestions="fetchRouteData"
 				placeholder="Enter a valid route"
 				@select="selectedRoute"
-				:props="routeProperties">
+				valueKey="name">
 				<template slot="prepend">New Route:</template>
 			</el-autocomplete>
 
@@ -57,7 +57,7 @@
 				<el-button-group class="route-styling">
 					<el-button class="first-item" :style="{ 'background-color': getRouteColor(customRoute.modeName) }">{{ capitalise(customRoute.modeName) }}</el-button>	
 					<el-button class="second-item" :style="{ 'background-color': getRouteColor(customRoute.modeName) }">{{ customRoute.name }}</el-button>
-					<el-button class="third-item" icon="delete" @click="transportData.splice(index, 1)"></el-button>
+					<el-button class="third-item" icon="el-icon-delete" @click="transportData.splice(index, 1)"></el-button>
 				</el-button-group>
 			</div>
 
@@ -78,9 +78,6 @@
 		data () {
 			return {
 				addRouteDialogVisible: false,
-				routeProperties: {
-					label: 'name'
-				},
 				routeToSearch: '',
 				selectedGroups: {
 					tube: 'Tube Lines',
@@ -98,6 +95,7 @@
 				this.$http
 					.get('https://api.tfl.gov.uk/Line/' + searchTerm)
 					.then((response) => {
+						console.log(response);
 						callback(response.data);
 					},
 					(err) => console.log(err));
@@ -114,12 +112,13 @@
 				if (!status) return '';
 
 				switch (status) {
-				case 10:
-					return 'success';
-				case 5:
-					return 'warning';
-				case 20:
-					return 'danger';
+					case 10:
+						return 'success';
+					case 5:
+					case 9:
+						return 'warning';
+					case 20:
+						return 'danger';
 				}
 			},
 			getTubeData () {
@@ -176,7 +175,7 @@
 		}
 
 		.card-style {
-			background-color: rgba(255, 255, 255, 0.7);
+			background-color: rgba(255, 255, 255, 1);
 
 			.tube-styling {
 				width: 100%;
@@ -196,6 +195,7 @@
 				.second-item {
 					width: 70%;
 				}
+				
 				.third-item {
 					width: 15%;
 				}

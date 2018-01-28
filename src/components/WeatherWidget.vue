@@ -21,7 +21,7 @@
 			return {
 				temperature: 0,
 				temperatureIcon: 'el-icon-fa-thermometer-half',
-				weatherIcon: 'adjust',
+				weatherIcon: 'el-icon-fa-adjust',
 				weatherInfo: ''
 			};
 		},

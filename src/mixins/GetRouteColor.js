@@ -1,5 +1,5 @@
 const GetRouteColor = {
-	data() {
+	data () {
 		return {
 			routeColor: 'rgba(208, 26, 30, 0.85)'
 		};

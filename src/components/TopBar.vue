@@ -1,5 +1,5 @@
 <template>
-	<el-menu theme="dark" class="navbar" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+	<el-menu class="navbar" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
 		<el-menu-item index="1">{{ location }}</el-menu-item>
 		<el-submenu index="2">
 			<template slot="title">Users</template>
