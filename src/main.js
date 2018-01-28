@@ -6,12 +6,15 @@ import router from './router';
 import Element from 'element-ui';
 import VueResource from 'vue-resource';
 import Moment from 'vue-moment';
+import 'vue-awesome/icons';
+import Icon from 'vue-awesome/components/Icon';
 
 Vue.config.productionTip = false;
 
 Vue.use(VueResource);
 Vue.use(Element);
 Vue.use(Moment);
+Vue.component('icon', Icon);
 
 /* eslint-disable no-new */
 new Vue({

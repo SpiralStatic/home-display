@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<i :class="weatherIcon" class="el-icon-fa-2x" aria-hidden="true"></i>{{ this.weatherInfo }}
-		<i :class="temperatureIcon" class="el-icon-fa-2x" aria-hidden="true"></i>{{ this.temperature }}&#8451;
+		<icon :name="weatherIcon" scale="2" class="icon" aria-hidden="true"></icon>{{ this.weatherInfo }}
+		<icon :name="temperatureIcon" scale="2" class="icon" aria-hidden="true"></icon>{{ this.temperature }}&#8451;
 	</div>
 </template>
 
@@ -20,8 +20,8 @@
 		data () {
 			return {
 				temperature: 0,
-				temperatureIcon: 'el-icon-fa-thermometer-half',
-				weatherIcon: 'el-icon-fa-adjust',
+				temperatureIcon: 'thermometer-half',
+				weatherIcon: 'adjust',
 				weatherInfo: ''
 			};
 		},

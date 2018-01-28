@@ -1,55 +1,55 @@
 const WeatherUtilities = {
 	methods: {
 		getWeatherIcon: function (weatherCode) {
-			if (!weatherCode) return 'el-icon-fa-adjust';
+			if (!weatherCode) return 'adjust';
 
 			switch (weatherCode) {
 				case '01d':
-					return 'el-icon-fa-sun-o';
+					return 'sun-o';
 				case '01n':
-					return 'el-icon-fa-moon-o';
+					return 'moon-o';
 				case '02d':
 				case '02n':
 				case '03d':
 				case '03n':
 				case '04d':
 				case '04n':
-					return 'el-icon-fa-cloud';
+					return 'cloud';
 				case '09d':
 				case '09n':
-					return 'el-icon-fa-tint';
+					return 'tint';
 				case '10d':
 				case '10n':
-					return 'el-icon-fa-shower';
+					return 'shower';
 				case '11d':
 				case '11n':
-					return 'el-icon-fa-bolt';
+					return 'bolt';
 				case '13d':
 				case '13n':
-					return 'el-icon-fa-snowflake-o';
+					return 'snowflake-o';
 				case '50d':
 				case '50n':
-					return 'el-icon-fa-low-vision';
+					return 'low-vision';
 				default:
-					return 'el-icon-fa-adjust';
+					return 'adjust';
 			}
 		},
 		getTemperatureIcon: function (temperature) {
-			if (!temperature) return 'el-icon-fa-thermometer-half';
+			if (!temperature) return 'thermometer-half';
 
 			switch (temperature) {
 				case temperature > 25:
-					return 'el-icon-fa-thermometer-full';
+					return 'thermometer-full';
 				case temperature > 20:
-					return 'el-icon-fa-thermometer-three-quarters';
+					return 'thermometer-three-quarters';
 				case temperature > 10:
-					return 'el-icon-fa-thermometer-half';
+					return 'thermometer-half';
 				case temperature > 5:
-					return 'el-icon-fa-thermometer-quarter';
+					return 'thermometer-quarter';
 				case temperature > 0:
-					return 'el-icon-fa-thermometer-empty';
+					return 'thermometer-empty';
 				default:
-					return 'el-icon-fa-thermometer-half';
+					return 'thermometer-half';
 			}
 		}
 	}
