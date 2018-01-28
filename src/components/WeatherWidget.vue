@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<i class="el-icon-fa-adjust el-icon-fa-2x" aria-hidden="true"></i>{{ this.weatherInfo }}
+		<i :class="weatherIcon" class="el-icon-fa-2x" aria-hidden="true"></i>{{ this.weatherInfo }}
 		<i :class="temperatureIcon" class="el-icon-fa-2x" aria-hidden="true"></i>{{ this.temperature }}&#8451;
 	</div>
 </template>

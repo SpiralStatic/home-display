@@ -4,24 +4,30 @@ const WeatherUtilities = {
 			if (!weatherCode) return 'adjust';
 
 			switch (weatherCode) {
-			case 'bakerloo':
-				return 'rgba(179, 99, 5, 0.85)';
-			case 'central':
-				return 'rgba(227, 32, 23, 0.85)';
-			default:
-				return 'adjust';
+				case '01d':
+					return 'sun-o';
+				case '01n':
+					return 'moon-o';
+				default:
+					return 'adjust';
 			}
 		},
 		getTemperatureIcon: function (temperature) {
 			if (!temperature) return 'el-icon-fa-thermometer-half';
 
 			switch (temperature) {
-			case 'bakerloo':
-				return 'rgba(179, 99, 5, 0.85)';
-			case 'central':
-				return 'rgba(227, 32, 23, 0.85)';
-			default:
-				return 'el-icon-fa-thermometer-half';
+				case temperature > 25:
+					return 'el-icon-fa-thermometer-full';
+				case temperature > 20:
+					return 'el-icon-fa-thermometer-three-quarters';
+				case temperature > 10:
+					return 'el-icon-fa-thermometer-half';
+				case temperature > 5:
+					return 'el-icon-fa-thermometer-quarter';
+				case temperature > 0:
+					return 'el-icon-fa-thermometer-empty';
+				default:
+					return 'el-icon-fa-thermometer-half';
 			}
 		}
 	}
